@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Keys Database</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .search-container {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            margin-bottom: 10px;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .filter-select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .api-list {
+            list-style: none;
+        }
+        
+        .api-item {
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            transition: transform 0.2s;
+        }
+        
+        .api-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .api-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .api-name {
+            font-size: 1.3rem;
+            color: #333;
+        }
+        
+        .api-category {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #e9f7fe;
+            color: #3498db;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .api-description {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .api-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .api-detail {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .api-detail span {
+            margin-right: 5px;
+            font-weight: 600;
+        }
+        
+        .api-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .api-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        
+        .api-link:hover {
+            background-color: #2980b9;
+        }
+        
+        .api-link.docs {
+            background-color: #2ecc71;
+        }
+        
+        .api-link.docs:hover {
+            background-color: #27ae60;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .pagination-btn {
+            padding: 8px 15px;
+            margin: 0 5px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .pagination-btn:hover {
+            background-color: #e9e9e9;
+        }
+        
+        .pagination-btn.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>API Keys Database</h1>
+            <p class="description">Find information about popular APIs, including documentation links and descriptions</p>
+        </header>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search for an API..." id="searchInput">
+        </div>
+        
+        <div class="filter-container">
+            <div class="filter-group">
+                <span class="filter-label">Category:</span>
+                <select class="filter-select" id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="payment">Payment</option>
+                    <option value="weather">Weather</option>
+                    <option value="maps">Maps</option>
+                    <option value="ai">AI</option>
+                    <option value="social">Social Media</option>
+                    <option value="cloud">Cloud Services</option>
+                    <option value="communications">Communications</option>
+                    <option value="data">Data</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <span class="filter-label">Authentication:</span>
+                <select class="filter-select" id="authFilter">
+                    <option value="all">All Types</option>
+                    <option value="apikey">API Key</option>
+                    <option value="oauth">OAuth</option>
+                    <option value="bearer">Bearer Token</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <span class="filter-label">Sort by:</span>
+                <select class="filter-select" id="sortFilter">
+                    <option value="name">Name (A-Z)</option>
+                    <option value="popular">Popularity</option>
+                </select>
+            </div>
+        </div>
+        
+        <ul class="api-list" id="apiList">
+            <!-- Stripe -->
+            <li class="api-item" data-category="payment" data-auth="apikey">
+                <div class="api-header">
+                    <h2 class="api-name">Stripe API</h2>
+                    <span class="api-category">Payment</span>
+                </div>
+                <p class="api-description">A suite of payment APIs that powers commerce for online businesses of all sizes, including fraud prevention, and subscription management.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> API Key</div>
+                    <div class="api-detail"><span>Pricing:</span> Pay as you go (2.9% + 30¢ per transaction)</div>
+                    <div class="api-detail"><span>Rate Limit:</span> Varies by endpoint</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://stripe.com/docs/api" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://dashboard.stripe.com/register" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+            
+            <!-- OpenWeatherMap -->
+            <li class="api-item" data-category="weather" data-auth="apikey">
+                <div class="api-header">
+                    <h2 class="api-name">OpenWeatherMap API</h2>
+                    <span class="api-category">Weather</span>
+                </div>
+                <p class="api-description">Weather data API providing current weather data, forecasts, historical data, and weather maps for any location on Earth.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> API Key</div>
+                    <div class="api-detail"><span>Pricing:</span> Free tier available (60 calls/min)</div>
+                    <div class="api-detail"><span>Rate Limit:</span> 60 calls/minute (free tier)</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://openweathermap.org/api" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://home.openweathermap.org/users/sign_up" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+            
+            <!-- Google Maps -->
+            <li class="api-item" data-category="maps" data-auth="apikey">
+                <div class="api-header">
+                    <h2 class="api-name">Google Maps API</h2>
+                    <span class="api-category">Maps</span>
+                </div>
+                <p class="api-description">A set of APIs that allow you to add maps, geocoding, directions, places, street view and more to your applications.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> API Key</div>
+                    <div class="api-detail"><span>Pricing:</span> $200 monthly free credit</div>
+                    <div class="api-detail"><span>Rate Limit:</span> Varies by API and billing account</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://developers.google.com/maps/documentation" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://console.cloud.google.com/project/_/google/maps-apis/credentials" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+            
+            <!-- OpenAI -->
+            <li class="api-item" data-category="ai" data-auth="apikey">
+                <div class="api-header">
+                    <h2 class="api-name">OpenAI API</h2>
+                    <span class="api-category">AI</span>
+                </div>
+                <p class="api-description">Access to powerful language models like GPT-4 and GPT-3.5 for various natural language processing tasks including text generation, summarization, and more.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> API Key</div>
+                    <div class="api-detail"><span>Pricing:</span> Pay per token (varies by model)</div>
+                    <div class="api-detail"><span>Rate Limit:</span> Depends on usage tier</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://platform.openai.com/docs/api-reference" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://platform.openai.com/signup" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+            
+            <!-- Twitter API -->
+            <li class="api-item" data-category="social" data-auth="oauth">
+                <div class="api-header">
+                    <h2 class="api-name">Twitter API</h2>
+                    <span class="api-category">Social Media</span>
+                </div>
+                <p class="api-description">Access to Twitter data including tweets, users, spaces, and direct messages. Build applications to analyze, engage with, or create Twitter content.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> OAuth 2.0</div>
+                    <div class="api-detail"><span>Pricing:</span> Free (Basic), Paid tiers available</div>
+                    <div class="api-detail"><span>Rate Limit:</span> Varies by endpoint</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://developer.twitter.com/en/docs" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://developer.twitter.com/en/portal/dashboard" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+            
+            <!-- AWS -->
+            <li class="api-item" data-category="cloud" data-auth="apikey">
+                <div class="api-header">
+                    <h2 class="api-name">AWS API</h2>
+                    <span class="api-category">Cloud Services</span>
+                </div>
+                <p class="api-description">Access to Amazon Web Services cloud infrastructure, including computing, storage, databases, machine learning, and more.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> Access Key ID & Secret</div>
+                    <div class="api-detail"><span>Pricing:</span> Pay as you go (varies by service)</div>
+                    <div class="api-detail"><span>Rate Limit:</span> Service-specific quotas</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://docs.aws.amazon.com/" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://aws.amazon.com/console/" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+            
+            <!-- Twilio -->
+            <li class="api-item" data-category="communications" data-auth="apikey">
+                <div class="api-header">
+                    <h2 class="api-name">Twilio API</h2>
+                    <span class="api-category">Communications</span>
+                </div>
+                <p class="api-description">Communication APIs for SMS, voice, video, and authentication that enable you to add messaging, voice, and video to your applications.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> Account SID & Auth Token</div>
+                    <div class="api-detail"><span>Pricing:</span> Pay as you go (per SMS, call, etc.)</div>
+                    <div class="api-detail"><span>Rate Limit:</span> Account-specific</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://www.twilio.com/docs/api" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://www.twilio.com/try-twilio" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+            
+            <!-- Spotify -->
+            <li class="api-item" data-category="data" data-auth="oauth">
+                <div class="api-header">
+                    <h2 class="api-name">Spotify API</h2>
+                    <span class="api-category">Data</span>
+                </div>
+                <p class="api-description">Web API that provides access to Spotify data including albums, artists, tracks, playlists, and user information. Build music applications and integrate with Spotify.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> OAuth 2.0</div>
+                    <div class="api-detail"><span>Pricing:</span> Free</div>
+                    <div class="api-detail"><span>Rate Limit:</span> Short term (120 requests/minute)</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://developer.spotify.com/documentation/web-api/" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://developer.spotify.com/dashboard/" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+            
+            <!-- Google Vision API -->
+            <li class="api-item" data-category="ai" data-auth="apikey">
+                <div class="api-header">
+                    <h2 class="api-name">Google Vision API</h2>
+                    <span class="api-category">AI</span>
+                </div>
+                <p class="api-description">Image analysis API that uses machine learning to identify objects, detect faces, read text, and extract other information from images.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> API Key</div>
+                    <div class="api-detail"><span>Pricing:</span> First 1,000 units/month free</div>
+                    <div class="api-detail"><span>Rate Limit:</span> 1,800 requests/minute</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://cloud.google.com/vision/docs" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://console.cloud.google.com/apis/library/vision.googleapis.com" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+            
+            <!-- GitHub API -->
+            <li class="api-item" data-category="data" data-auth="bearer">
+                <div class="api-header">
+                    <h2 class="api-name">GitHub API</h2>
+                    <span class="api-category">Data</span>
+                </div>
+                <p class="api-description">API to build integrations with GitHub, access repositories, issues, pull requests, and other GitHub resources programmatically.</p>
+                <div class="api-details">
+                    <div class="api-detail"><span>Auth Type:</span> Bearer Token</div>
+                    <div class="api-detail"><span>Pricing:</span> Free for public repositories</div>
+                    <div class="api-detail"><span>Rate Limit:</span> 5,000 requests/hour</div>
+                </div>
+                <div class="api-links">
+                    <a href="https://docs.github.com/en/rest" target="_blank" class="api-link docs">Documentation</a>
+                    <a href="https://github.com/settings/tokens" target="_blank" class="api-link">Get API Key</a>
+                </div>
+            </li>
+        </ul>
+        
+        <div class="pagination">
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">Next »</button>
+        </div>
+        
+        <footer>
+            <p>API Keys Database © 2025 - A simple reference for popular APIs</p>
+        </footer>
+    </div>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const apiItems = document.querySelectorAll('.api-item');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const authFilter = document.getElementById('authFilter');
+        
+        function filterAPIs() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const categoryValue = categoryFilter.value;
+            const authValue = authFilter.value;
+            
+            apiItems.forEach(item => {
+                const apiName = item.querySelector('.api-name').textContent.toLowerCase();
+                const apiDescription = item.querySelector('.api-description').textContent.toLowerCase();
+                const apiCategory = item.dataset.category;
+                const apiAuth = item.dataset.auth;
+                
+                const matchesSearch = apiName.includes(searchTerm) || apiDescription.includes(searchTerm);
+                const matchesCategory = categoryValue === 'all' || apiCategory === categoryValue;
+                const matchesAuth = authValue === 'all' || apiAuth === authValue;
+                
+                if (matchesSearch && matchesCategory && matchesAuth) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        searchInput.addEventListener('input', filterAPIs);
+        categoryFilter.addEventListener('change', filterAPIs);
+        authFilter.addEventListener('change', filterAPIs);
+        
+        // Sort functionality
+        const sortFilter = document.getElementById('sortFilter');
+        const apiList = document.getElementById('apiList');
+        
+        sortFilter.addEventListener('change', () => {
+            const sortValue = sortFilter.value;
+            const items = Array.from(apiItems);
+            
+            if (sortValue === 'name') {
+                items.sort((a, b) => {
+                    const nameA = a.querySelector('.api-name').textContent;
+                    const nameB = b.querySelector('.api-name').textContent;
+                    return nameA.localeCompare(nameB);
+                });
+            } else if (sortValue === 'popular') {
+                // Simulating popularity based on the order in HTML
+                // In a real app, you would have actual popularity metrics
+                const popularOrder = [
+                    'Google Maps API', 'Stripe API', 'OpenAI API', 
+                    'AWS API', 'Twilio API', 'Twitter API',
+                    'GitHub API', 'Spotify API', 'OpenWeatherMap API', 'Google Vision API'
+                ];
+                
+                items.sort((a, b) => {
+                    const nameA = a.querySelector('.api-name').textContent;
+                    const nameB = b.querySelector('.api-name').textContent;
+                    return popularOrder.indexOf(nameA) - popularOrder.indexOf(nameB);
+                });
+            }
+            
+            // Re-append items in the new order
+            items.forEach(item => {
+                apiList.appendChild(item);
+            });
+        });
+        
+        // Pagination (for demo purposes)
+        const paginationButtons = document.querySelectorAll('.pagination-btn');
+        
+        paginationButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                paginationButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // In a real implementation, this would load different pages of results
+                // For this demo, we're just showing the UI interaction
+                
+                // Scroll to top of results
+                document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
