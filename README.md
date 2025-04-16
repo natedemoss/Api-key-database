@@ -1,5 +1,6 @@
 # API Keys Database
-![Static Badge](https://img.shields.io/badge/Please_Contribute!-blue)
+![Static Badge](https://img.shields.io/badge/Please_Contribute!-blue?logoSize=amg)
+
 
 A comprehensive collection of popular APIs with their documentation links, authentication types, and other essential information.
 
