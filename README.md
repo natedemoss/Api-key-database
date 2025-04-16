@@ -23,53 +23,53 @@ FAQ
 How can I contribute to this project?
 You can contribute by:
 
-Adding new APIs
+- Adding new APIs
 
-Improving the design
+- Improving the design
 
-Adding new features
+- Adding new features
 
-Reporting issues
+- Reporting issues
 
-Updating outdated information
+- Updating outdated information
 
 Can I use this for commercial purposes?
-Yes, this project is open-source under the MIT license.
+- Yes, this project is open-source under the MIT license.
 
 How often is the API information updated?
-The information is manually maintained. Please open an issue or submit a pull request if you find outdated information.
+- The information is manually maintained. Please open an issue or submit a pull request if you find outdated information.
 
 Why isn't my new API showing up?
 Make sure:
 
-You've added it to the correct section in index.html
+- You've added it to the correct section in index.html
 
-All data attributes are properly set
+- All data attributes are properly set
 
-The HTML structure matches the template
+- The HTML structure matches the template
 
 Contributing
 We welcome contributions! Here's how to help:
 
-Fork the repository
+- Fork the repository
 
-Create a feature branch (git checkout -b feature/AmazingFeature)
+- Create a feature branch (git checkout -b feature/AmazingFeature)
 
-Commit your changes (git commit -m 'Add some AmazingFeature')
+- Commit your changes (git commit -m 'Add some AmazingFeature')
 
-Push to the branch (git push origin feature/AmazingFeature)
+- Push to the branch (git push origin feature/AmazingFeature)
 
-Open a Pull Request
+- Open a Pull Request
 
-Areas needing contributions:
+- Areas needing contributions:
 
-Adding more APIs
+- Adding more APIs
 
-Improving search/filter functionality
+- Improving search/filter functionality
 
-Enhancing mobile experience
+- Enhancing mobile experience
 
-Adding API testing functionality
+- Adding API testing functionality
 
 License
 Distributed under the MIT License. See LICENSE for more information.
@@ -79,9 +79,9 @@ Nathan DeMoss - ndemoss28@gmail.com
 
 
 Acknowledgments
-All API providers for their documentation
+- All API providers for their documentation
 
-Contributors who help maintain this project
+- Contributors who help maintain this project
 
-Open source community for inspiration
+- Open source community for inspiration
 
